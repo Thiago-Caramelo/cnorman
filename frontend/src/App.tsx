@@ -36,13 +36,8 @@ class App extends React.Component<{}, IState> {
             Add
         </button>
         </form>
-        <div>
-          {this.renderTodoList()}
-        </div>
         <div className="grid-container">
-          <div className="grid-item">1</div>
-          <div className="grid-item">2</div>
-          <div className="grid-item">3</div>
+          {this.renderTodoList()}
         </div>
       </div>
     );
@@ -53,14 +48,20 @@ class App extends React.Component<{}, IState> {
   }
 
   private renderTodoList() {
-    const result: string[] = []
-    for (const key in this.state.todos) {
-      if (this.state.todos.hasOwnProperty(key)) {
-        const element: ITodo = this.state.todos[key];
-        result.push(element.todo)
+    const todoList: JSX.Element[] = []
+    for (const todoKey in this.state.todos) {
+      if (this.state.todos.hasOwnProperty(todoKey)) {
+        const todo: ITodo = this.state.todos[todoKey];
+        const todoElement = (
+          <div key={todoKey} className="grid-item">
+            {todo.todo}
+            <button onClick={this.deleteTodo.bind(this, todoKey)}>Delete</button>
+          </div>
+        )
+        todoList.push(todoElement)
       }
     }
-    return JSON.stringify(result)
+    return todoList
   }
 
   private handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -74,16 +75,16 @@ class App extends React.Component<{}, IState> {
   }
 
   private createTodo = (todo: string) => this.createTodoState(todo);
-  // private deleteTodo = (id: string) => this.deleteTodoState(id);
+  private deleteTodo = (id: string) => this.deleteTodoState(id);
   // private doneTodo = (id: string) => this.doneTodoState(id);
 
-  // private deleteTodoState(id: string) {
-  //   this.setState((prevState: Readonly<IState>) => {
-  //     const currentTodos: ITodos = { ...prevState.todos }
-  //     delete currentTodos[id]
-  //     return { todos: currentTodos };
-  //   });
-  // }
+  private deleteTodoState(id: string) {
+    this.setState((prevState: Readonly<IState>) => {
+      const currentTodos: ITodos = { ...prevState.todos }
+      delete currentTodos[id]
+      return { todos: currentTodos };
+    });
+  }
 
   private createTodoState(todo: string) {
     this.setState((prevState: Readonly<IState>) => {
