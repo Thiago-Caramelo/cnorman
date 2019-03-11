@@ -54,7 +54,12 @@ class App extends React.Component<{}, IState> {
         const todo: ITodo = this.state.todos[todoKey];
         const todoElement = (
           <div key={todoKey} className="grid-item">
-            {todo.todo}
+            <input
+              name="done"
+              type="checkbox"
+              checked={todo.done}
+              onChange={this.doneTodo.bind(this, todoKey)} />
+            <text style={{ textDecoration: todo.done ? "line-through" : "none" }}>{todo.todo}</text>
             <button onClick={this.deleteTodo.bind(this, todoKey)}>Delete</button>
           </div>
         )
@@ -76,7 +81,7 @@ class App extends React.Component<{}, IState> {
 
   private createTodo = (todo: string) => this.createTodoState(todo);
   private deleteTodo = (id: string) => this.deleteTodoState(id);
-  // private doneTodo = (id: string) => this.doneTodoState(id);
+  private doneTodo = (id: string) => this.doneTodoState(id);
 
   private deleteTodoState(id: string) {
     this.setState((prevState: Readonly<IState>) => {
@@ -94,13 +99,13 @@ class App extends React.Component<{}, IState> {
     });
   }
 
-  // private doneTodoState(id: string) {
-  //   this.setState((prevState: Readonly<IState>) => {
-  //     const currentTodos: ITodos = { ...prevState.todos }
-  //     currentTodos[id].done = !currentTodos[id].done
-  //     return { todos: currentTodos };
-  //   });
-  // }
+  private doneTodoState(id: string) {
+    this.setState((prevState: Readonly<IState>) => {
+      const currentTodos: ITodos = { ...prevState.todos }
+      currentTodos[id].done = !currentTodos[id].done
+      return { todos: currentTodos };
+    });
+  }
 }
 
 export default App;
