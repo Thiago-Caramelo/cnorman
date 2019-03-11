@@ -13,7 +13,7 @@ const findAllTodos = () => {
 const createTodo = (todo) => {
   const newTodo = {
     id: uuidv1(),
-    body: todo,
+    todo,
     done: false,
   }
   todos[newTodo.id] = newTodo
