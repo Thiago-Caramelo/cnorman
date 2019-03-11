@@ -39,3 +39,8 @@
   text-align: left;
   border-bottom: 1px solid black;
 }
+.grid-cell {
+  padding-left: 10px;
+  padding-right: 10px;
+  display: inline;
+}

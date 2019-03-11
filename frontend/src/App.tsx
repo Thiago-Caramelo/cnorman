@@ -1,7 +1,6 @@
 import * as React from 'react';
-import * as v1 from 'uuid/v1';
 import './App.css';
-import { queryTodos } from './graphqlAgent'
+import * as agent from './graphqlAgent'
 import { ITodo, ITodos } from './interfaces'
 
 interface IState {
@@ -37,7 +36,7 @@ class App extends React.Component<{}, IState> {
   }
 
   public componentDidMount() {
-    queryTodos().then((todos) => {
+    agent.queryTodos().then((todos) => {
       this.setState({ todos })
     })
   }
@@ -49,13 +48,13 @@ class App extends React.Component<{}, IState> {
         const todo: ITodo = this.state.todos[todoKey];
         const todoElement = (
           <div key={todoKey} className="grid-item">
-            <input
+            <div className="grid-cell"><input
               name="done"
               type="checkbox"
               checked={todo.done}
-              onChange={this.doneTodo.bind(this, todoKey)} />
-            <text style={{ textDecoration: todo.done ? "line-through" : "none" }}>{todo.todo}</text>
-            <button onClick={this.deleteTodo.bind(this, todoKey)}>Delete</button>
+              onChange={this.doneTodo.bind(this, todoKey)} /></div>
+            <div className="grid-cell" style={{ textDecoration: todo.done ? "line-through" : "none" }}>{todo.todo}</div>
+            <div className="grid-cell"><button onClick={this.deleteTodo.bind(this, todoKey)}>Delete</button></div>
           </div>
         )
         todoList.push(todoElement)
@@ -87,12 +86,13 @@ class App extends React.Component<{}, IState> {
   }
 
   private createTodoState(todo: string) {
-    this.setState((prevState: Readonly<IState>) => {
-      const currentTodos: ITodos = { ...prevState.todos }
-      const id = v1()
-      currentTodos[id] = { id, todo, done: false }
-      return { todos: currentTodos };
-    });
+    agent.createTodo(todo).then((responseTodo) => {
+      this.setState((prevState: Readonly<IState>) => {
+        const currentTodos: ITodos = { ...prevState.todos }
+        currentTodos[responseTodo.id] = responseTodo
+        return { todos: currentTodos };
+      });
+    })
   }
 
   private doneTodoState(id: string) {

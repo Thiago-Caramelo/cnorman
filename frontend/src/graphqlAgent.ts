@@ -1,4 +1,4 @@
-import ApolloClient from 'apollo-boost';
+import ApolloClient, { FetchResult } from 'apollo-boost';
 import gql from 'graphql-tag';
 import { ApolloQueryResult } from 'apollo-boost';
 import { ITodo, ITodos } from './interfaces'
@@ -27,5 +27,23 @@ export const queryTodos = () => {
     })
 
     return result
+  })
+}
+
+export const createTodo = (todo: string) => {
+  return client.mutate({
+    variables: { todo },
+    mutation: gql`
+    mutation CreateTodo($todo: String!) {
+      createTodo(todo: $todo) {
+        id
+        todo
+        done
+      }
+    }
+  `
+  }).then((response: FetchResult) => {
+    const responseTodo: ITodo = response.data!.createTodo
+    return responseTodo
   })
 }
