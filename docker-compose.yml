@@ -5,6 +5,8 @@ services:
     build:
       context:  ./frontend
       dockerfile: Dockerfile
+    environment:
+        - HOST_IP=159.65.237.246
     expose:
       - "5000"
   graphql:
