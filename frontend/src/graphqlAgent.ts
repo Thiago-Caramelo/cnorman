@@ -4,7 +4,7 @@ import { ApolloQueryResult } from 'apollo-boost';
 import { ITodo, ITodos } from './interfaces'
 
 const client = new ApolloClient({
-  uri: 'http://localhost:4000/graphql'
+  uri: 'http://localhost/graphql'
 });
 
 export const queryTodos = () => {
