@@ -47,3 +47,34 @@ export const createTodo = (todo: string) => {
     return responseTodo
   })
 }
+
+export const deleteTodo = (id: string) => {
+  return client.mutate({
+    variables: { id },
+    mutation: gql`
+    mutation DeleteTodo($id: ID!) {
+      deleteTodo(id: $id)
+    }
+  `
+  }).then(() => {
+    return true
+  })
+}
+
+export const updateTodo = (id: string) => {
+  return client.mutate({
+    variables: { id },
+    mutation: gql`
+    mutation UpdateTodo($id: ID!) {
+      updateTodo(id: $id) {
+        id
+        todo
+        done
+      }
+    }
+  `
+  }).then((response: FetchResult) => {
+    const responseTodo: ITodo = response.data!.updateTodo
+    return responseTodo
+  })
+}

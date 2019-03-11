@@ -78,11 +78,13 @@ class App extends React.Component<{}, IState> {
   private doneTodo = (id: string) => this.doneTodoState(id);
 
   private deleteTodoState(id: string) {
-    this.setState((prevState: Readonly<IState>) => {
-      const currentTodos: ITodos = { ...prevState.todos }
-      delete currentTodos[id]
-      return { todos: currentTodos };
-    });
+    agent.deleteTodo(id).then(() => {
+      this.setState((prevState: Readonly<IState>) => {
+        const currentTodos: ITodos = { ...prevState.todos }
+        delete currentTodos[id]
+        return { todos: currentTodos };
+      });
+    })
   }
 
   private createTodoState(todo: string) {
@@ -96,11 +98,13 @@ class App extends React.Component<{}, IState> {
   }
 
   private doneTodoState(id: string) {
-    this.setState((prevState: Readonly<IState>) => {
-      const currentTodos: ITodos = { ...prevState.todos }
-      currentTodos[id].done = !currentTodos[id].done
-      return { todos: currentTodos };
-    });
+    agent.updateTodo(id).then((responseTodo) => {
+      this.setState((prevState: Readonly<IState>) => {
+        const currentTodos: ITodos = { ...prevState.todos }
+        currentTodos[id].done = responseTodo.done
+        return { todos: currentTodos };
+      });
+    })
   }
 }
 
