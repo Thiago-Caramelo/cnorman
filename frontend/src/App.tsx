@@ -2,16 +2,7 @@ import * as React from 'react';
 import * as v1 from 'uuid/v1';
 import './App.css';
 import { queryTodos } from './graphqlAgent'
-import { ApolloQueryResult } from 'apollo-boost';
-
-interface ITodo {
-  todo: string
-  done: boolean
-}
-
-interface ITodos {
-  [key: string]: ITodo;
-};
+import { ITodo, ITodos } from './interfaces'
 
 interface IState {
   todos: ITodos;
@@ -46,8 +37,8 @@ class App extends React.Component<{}, IState> {
   }
 
   public componentDidMount() {
-    queryTodos().then((response: ApolloQueryResult<ITodos>) => {
-      this.setState({ todos: response.data })
+    queryTodos().then((todos) => {
+      this.setState({ todos })
     })
   }
 
@@ -98,7 +89,8 @@ class App extends React.Component<{}, IState> {
   private createTodoState(todo: string) {
     this.setState((prevState: Readonly<IState>) => {
       const currentTodos: ITodos = { ...prevState.todos }
-      currentTodos[v1()] = { todo, done: false }
+      const id = v1()
+      currentTodos[id] = { id, todo, done: false }
       return { todos: currentTodos };
     });
   }
