@@ -1,6 +1,8 @@
 import * as React from 'react';
 import * as v1 from 'uuid/v1';
 import './App.css';
+import { queryTodos } from './graphqlAgent'
+import { ApolloQueryResult } from 'apollo-boost';
 
 interface ITodo {
   todo: string
@@ -44,7 +46,9 @@ class App extends React.Component<{}, IState> {
   }
 
   public componentDidMount() {
-    // load data from server
+    queryTodos().then((response: ApolloQueryResult<ITodos>) => {
+      this.setState({ todos: response.data })
+    })
   }
 
   private renderTodoList() {
