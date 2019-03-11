@@ -1,0 +1,15 @@
+type Todo {
+    key: ID!
+    todo: String!
+    done: Boolean!
+}
+# schema's query
+type Query {
+    tweets : [Todo] 
+}
+# schema's mutation:
+type Mutation {
+    createTodo(body: String): Todo
+    deleteTodo(id: ID!) : Boolean
+    updateTodo(id: ID!, body: String!) : Todo
+}
